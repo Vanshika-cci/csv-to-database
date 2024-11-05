@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<db:config name="database-config" doc:name="Database Config" doc:id="6bf7468b-b8b8-4d6f-8081-c5f0054280f2" >
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.username}" password="${secure::db.password}" database="${db.database}" />
+	</db:config>
+	<configuration-properties doc:name="configuration-properties" doc:id="e0fb3c8b-6237-4a65-a275-87493a8969d6" file="properties\config-${mule.env}.yaml" />
+	<secure-properties:config name="secure-properties-config" doc:name="Secure Properties Config" doc:id="f99539bf-d0cc-4477-8760-c50c015f06fe" file="properties\secure\config-${mule.env}-secure.yaml" key="${mule.key}" />
+	<global-property doc:name="Global Property" doc:id="1b6abafb-5fa6-4bc5-be63-1d1e74fbed31" name="mule.env" value="dev" />
+	<global-property doc:name="Global Property" doc:id="f217a80d-0735-433b-8193-9660be38e115" name="mule.key" value="abcdef1234567890" />
+</mule>

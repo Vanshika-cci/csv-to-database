@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="csv-to-database-flow" doc:id="9084b230-ad08-4ffc-846e-0c5df0916bbd" >
+		<file:listener doc:name="On New or Updated File" doc:id="429684f3-4f7f-41f3-a9ce-4a3b18caee73" directory="C:\Users\Dell\Desktop\Testing\csv-to-database" moveToDirectory="C:\Users\Dell\Desktop\Testing\moved" outputMimeType="application/csv" overwrite="true">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</file:listener>
+		<logger level="INFO" doc:name="Start Log" doc:id="9a9e0f72-20b7-412a-a908-594a2472cbf8" message='#[flow.name ++ " started"]'/>
+		<ee:transform doc:name="Converted To Json" doc:id="ee2439e6-c9fe-471a-a5d1-aad23f93d504" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<try doc:name="try" doc:id="fe4a65eb-8dea-4e44-ab69-b0875eef248a" >
+			<foreach doc:name="for-each" doc:id="1df2e6fa-dc7b-4680-9b73-6a334c038c81" collection="#[payload]">
+				<db:insert doc:name="Insert Employee Data" doc:id="dba1c29a-e5e7-4601-ae0f-f6c4126694e8" config-ref="database-config">
+					<db:sql ><![CDATA[INSERT INTO employeeDetails (EmployeeID, FirstName, LastName, Age, Department, JoiningDate, Salary, Email, IsPermanent)
+        VALUES (:employeeId, :firstName, :lastName, :age, :department, :joiningDate, :salary, :email, :isPermanent)]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{
+	employeeId: payload.EmployeeID as Number,
+	firstName: payload.FirstName,
+	lastName: payload.LastName,
+	age: payload.Age as Number,
+	department: payload.Department,
+	joiningDate: ((payload.JoiningDate as Date {format: "dd-MM-yyyy"}) as String {format: "yyyy-MM-dd"}) as Date,
+	salary: payload.Salary as Number,
+	email: payload.Email,
+	isPermanent: payload.IsPermanent as Boolean
+}]]]></db:input-parameters>
+				
+</db:insert>
+		</foreach>
+			<error-handler >
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="856706f1-ba19-48ca-bae9-21853b5a53ce" type="DB:CONNECTIVITY">
+					<logger level="INFO" doc:name="DB:CONNECTIVITY" doc:id="3e3340dc-5600-464a-9d6e-d9d736f21a5e" message='#[%dw 2.0&#10;output application/json &#10;---&#10;{&#10;	"status": 500,&#10;	"errorType": "DB:CONNECTIVITY",&#10;	"description": "Database connection failed. Please try again later."&#10;}]'/>
+				</on-error-propagate>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="44c58828-101f-46ab-af97-260360657a58" type="DB:BAD_SQL_SYNTAX">
+					<logger level="INFO" doc:name="DB:BAD_SQL_SYNTAX" doc:id="79b20354-d638-4ea4-8007-f8d4fbbf37bd" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"status": 400,&#10;	"errorType": "DB:BAD_SQL_SYNTAX",&#10;	"description": "The SQL query contains invalid syntax."&#10;}]'/>
+				</on-error-propagate>
+			
+</error-handler>
+		</try>
+		<logger level="INFO" doc:name="End Logger" doc:id="ecbf0584-7a14-42f6-a26a-1059479a6281" message='#[flow.name ++ " ended"]'/>
+	
+</flow>
+	
+</mule>
