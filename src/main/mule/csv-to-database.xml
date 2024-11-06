@@ -28,9 +28,9 @@ payload]]></ee:set-payload>
 			<foreach doc:name="for-each" doc:id="1df2e6fa-dc7b-4680-9b73-6a334c038c81" collection="#[payload]">
 				<db:insert doc:name="Insert Employee Data" doc:id="dba1c29a-e5e7-4601-ae0f-f6c4126694e8" config-ref="database-config">
 					<db:sql ><![CDATA[INSERT INTO employeeDetails (EmployeeID, FirstName, LastName, Age, Department, JoiningDate, Salary, Email, IsPermanent)
-        VALUES (:employeeId, :firstName, :lastName, :age, :department, :joiningDate, :salary, :email, :isPermanent)]]></db:sql>
+        VALUES (:employeeID, :firstName, :lastName, :age, :department, :joiningDate, :salary, :email, :isPermanent)]]></db:sql>
 					<db:input-parameters ><![CDATA[#[{
-	employeeId: payload.EmployeeID as Number,
+	employeeID: payload.EmployeeID as Number,
 	firstName: payload.FirstName,
 	lastName: payload.LastName,
 	age: payload.Age as Number,
