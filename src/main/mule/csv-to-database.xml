@@ -35,7 +35,7 @@ payload]]></ee:set-payload>
 	lastName: payload.LastName,
 	age: payload.Age as Number,
 	department: payload.Department,
-	joiningDate: ((payload.JoiningDate as Date {format: "dd-MM-yyyy"}) as String {format: "yyyy-MM-dd"}) as Date,
+	joiningDate: payload.JoiningDate as String {format: "yyyy-MM-dd"} as Date {format: "yyyy-MM-dd"} ,
 	salary: payload.Salary as Number,
 	email: payload.Email,
 	isPermanent: payload.IsPermanent as Boolean

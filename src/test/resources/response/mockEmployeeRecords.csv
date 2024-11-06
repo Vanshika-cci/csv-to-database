@@ -1,0 +1,2 @@
+EmployeeID,FirstName,LastName,Age,Department,JoiningDate,Salary,Email,IsPermanent
+1,John,Doe,28,Finance,2022-01-15,60000.00,john.doe@example.com,true
