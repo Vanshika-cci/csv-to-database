@@ -4,7 +4,7 @@
 
 	<groupId>ce235d46-115c-497c-b0e2-474afd80f5e9</groupId>
 	<artifactId>csv-to-database</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
 
 	<name>csv-to-database</name>
