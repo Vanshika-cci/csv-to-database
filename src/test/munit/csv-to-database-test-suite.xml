@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="csv-to-database-test-suite.xml" />
+	<munit:test name="csv-to-database-test-suite-csv-to-database-flowTest" doc:id="9a557844-0996-4645-8e50-0c6410ae7536" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock : Insert Employee Data" doc:id="76e9009d-3a87-4e40-bfdc-9d9670e9c86e" processor="db:insert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="dba1c29a-e5e7-4601-ae0f-f6c4126694e8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://response/databaseResponsePayload.dwl')]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="7cacf159-649a-4e73-b8fa-b25c13f9fd92" >
+				<munit:payload value="#[MunitTools::getResourceAsString('response/mockEmployeeRecords.csv')]" encoding="UTF-8" mediaType="application/csv" />
+			</munit:set-event>
+			<flow-ref doc:name="csv-to-database-flow" doc:id="d37930f3-ca58-4d01-9cea-9ecd5aff9abc" name="csv-to-database-flow"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify : End Logger" doc:id="82b645db-6790-421e-8c21-e47a422cdef2" processor="logger">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ecbf0584-7a14-42f6-a26a-1059479a6281" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
