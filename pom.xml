@@ -13,7 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.4.0</app.runtime>
+		<app.runtime>4.7.0</app.runtime>
 		<mule.maven.plugin.version>4.2.0</mule.maven.plugin.version>
 		<munit.version>3.2.1</munit.version>
 	</properties>
@@ -31,7 +31,7 @@
 						<muleVersion>${app.runtime}</muleVersion>
 						<username>${anypoint.username}</username>
 						<password>${anypoint.password}</password>
-						<applicationName>${project.artifactId}-${env}</applicationName>
+						<applicationName>${project.artifactId}-${mule.env}</applicationName>
 						<environment>${environment}</environment>
 						<region>${commonDeployment.region}</region>
 						<workers>${commonDeployment.workers}</workers>
@@ -135,12 +135,6 @@
 			<artifactId>munit-tools</artifactId>
 			<version>${munit.version}</version>
 			<classifier>mule-plugin</classifier>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.weave</groupId>
-			<artifactId>assertions</artifactId>
-			<version>1.2.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
