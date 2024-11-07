@@ -31,7 +31,7 @@
 						<muleVersion>${app.runtime}</muleVersion>
 						<username>${anypoint.username}</username>
 						<password>${anypoint.password}</password>
-						<applicationName>${project.artifactId}-${env}</applicationName>
+						<applicationName>${project.artifactId}-${mule.env}</applicationName>
 						<environment>${environment}</environment>
 						<region>${commonDeployment.region}</region>
 						<workers>${commonDeployment.workers}</workers>
